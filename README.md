@@ -1,6 +1,6 @@
 # Text Classifiacation
 
-To use there code, please do the following preparation for the data:
+To use this code, please do the following preparation for the data:
 
 1. in this project folder, construct a "data" folder.
 2. in the data folder, please download the [Amazon training set](https://drive.google.com/file/d/0Bz8a_Dbh9QhbZEwyekt6Q08zMFE/view), [Amazon test set](https://drive.google.com/file/d/0Bz8a_Dbh9QhbVVlPUHFNWTQ4c0k/view) and [Yelp dataset](https://drive.google.com/drive/folders/0Bz8a_Dbh9Qhbfll6bVpmNUtUcFdjYmF2SEpmZUZUcVNiMUw1TWN6RDV3a0JHT3kxLVhVR2M).
