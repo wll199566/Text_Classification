@@ -65,7 +65,7 @@ def get_dataset_vocab(dataset_path):
                          dataset_path + "/yelp.test.csv"]    
     
     # read three files tokenize them and get the vocabulary for the dataset
-    token_list = []
+    token_set = set()
     for file in dataset_paths:
         data = pd.read_csv(file, header=None, low_memory=False) 
         # the first column is label, the second one is context
@@ -77,18 +77,16 @@ def get_dataset_vocab(dataset_path):
             #except TypeError:
             #    print(context) 
             for token in tokenize(clean_data(context)):
-                token_list.append(token)
+                token_set.add(token)
     
-    # remove repeated tokens
-    token_list = set(token_list)
-    print("this dataset has ", len(token_list), " vocabularies")
+    print("this dataset has ", len(token_set), " vocabularies")
     
     # iterate the set and construct the index for each vacobulary
     vocab2idx = {}
-    for i, token in enumerate(token_list):
+    for i, token in enumerate(token_set):
         vocab2idx[token] = i
 
-    return vocab2idx, len(token_list)    
+    return vocab2idx, len(token_set)    
 
 def construct_w2v_matrix(glove, embedding_dim, vocab_idx_dict, vocab_size):
     """
