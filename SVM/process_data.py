@@ -100,7 +100,7 @@ def construct_w2v_matrix(glove, embedding_dim, vocab_idx_dict, vocab_size):
                  each word.         
     """
     W = np.zeros(shape=(vocab_size, embedding_dim), dtype='float32')
-    for word, index in vocab_idx_dict.item():
+    for word, index in vocab_idx_dict.items():
         try:
             W[index,:] = glove[word]
         except KeyError:
