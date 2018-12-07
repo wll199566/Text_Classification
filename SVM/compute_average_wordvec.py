@@ -32,17 +32,22 @@ def compute_average_wordvec(dataset_path, embedding_size=50):
     else:
         dataset_paths = [dataset_path + "/yelp.train.csv",\
                          dataset_path + "/yelp.valid.csv",\
-                         dataset_path + "/yelp.test.csv"]    
-        word2idx = json.load(dataset_path + "/yelp.vacab.dict.json")                 
+                         dataset_path + "/yelp.test.csv"]                     
         word2idx_file = "/yelp.vacab.dict.json"
         embedding_matrix_file = "/yelp.w2v.matrix.json"
         
 
-        # load  the word2idx json file
-        word2idx = json.load(dataset_path + word2idx_file)
-        # load the embedding matrix file
-        obj_text = codecs.open(dataset_path + embedding_matrix_file, 'r', encoding='utf-8').read()
+    # load  the word2idx json file
+    with open(dataset_path+word2idx_file, 'r') as fin:
+        word2idx = json.load(fin)
+    print("load word2idx")
+    print("it has ", len(word2idx), " vocabularies")
+    
+    # load the embedding matrix file
+    with codecs.open(dataset_path + embedding_matrix_file, 'r', encoding='utf-8') as fin:
+        obj_text = fin.read()
         embedding_matrix = json.loads(obj_text)
+        print("load embedding matrix")
         embedding_matrix = np.array(embedding_matrix)
 
     # read three files clean and tokenize them
@@ -58,7 +63,7 @@ def compute_average_wordvec(dataset_path, embedding_size=50):
             count = 0
             sum_vec = np.zeros(embedding_size)
             for token in tokenize(clean_data(context)):
-                index = word2idx[token]
+                index = int(word2idx[token])
                 sum_vec += embedding_matrix[index, :]
                 count += 1
             average_vec_list.append(sum_vec / count)    
@@ -68,14 +73,14 @@ def compute_average_wordvec(dataset_path, embedding_size=50):
         if re.search(r'amazon', file) is not None:
             if re.search(r'train', file) is not None:
                 output_file = "/amazon.train.vector.csv"
-            elif re.search(r'valid') is not None:
+            elif re.search(r'valid', file) is not None:
                 output_file = "/amazon.valid.vector.csv"
             else:
                 output_file = "/amazon.test.vector.csv"
         else:
             if re.search(r'train', file) is not None:
                 output_file = "/yelp.train.vector.csv"
-            elif re.search(r'valid') is not None:
+            elif re.search(r'valid', file) is not None:
                 output_file = "/yelp.valid.vector.csv"
             else:
                 output_file = "/yelp.test.vector.csv"
