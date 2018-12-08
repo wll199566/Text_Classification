@@ -12,3 +12,4 @@ Additional resources:
 
 1. [Amazon](https://drive.google.com/file/d/14K7Nk_pysCmm5EIP9AX6dAdk13bWrO0r/view?usp=sharing) and [Yelp](https://drive.google.com/file/d/1qhFHFnCeRSjgWFlAye1n76sjZUaXyO2J/view?usp=sharing) cleaned and tokenized datasets.
 2. [Amazon](https://drive.google.com/file/d/1e---JP3vnaJ8uEaTX27JzMb3qDOixitB/view?usp=sharing) and [Yelp](https://drive.google.com/file/d/1T3yXU9fQUEOrqTz15aLrTf347q4-ujNj/view?usp=sharing) word2idx and word embedding matrix. 
+3. Different proportions (5%, 20%, 60%) of the datasets provided in 1, used for transfer learning. ([Amazon](https://drive.google.com/file/d/1bhohvpuX9CIDNZiWIIP2UtqukUrAMPc6/view?usp=sharing), [Yelp](https://drive.google.com/file/d/1PQFLpes6roqM9-toYhqehYnjQ8p9gPsE/view?usp=sharing)).
