@@ -12,7 +12,7 @@ from nltk.tokenize import word_tokenize
 from process_data import clean_data
 from process_data import tokenize
 
-def clean_tokenize_datasets(dataset_path, embedding_size=50):
+def clean_tokenize_datasets(dataset_path):
     """
      Argument:
              dataset_path: the folder name storing amazon or yelp dataset,
