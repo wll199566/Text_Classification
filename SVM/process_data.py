@@ -111,15 +111,15 @@ def construct_w2v_matrix(glove, embedding_dim, vocab_idx_dict, vocab_size):
     return W        
     
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
     #cleaned_sentence = clean_data("Friendly staff, same starbucks fair you get anywhere else. Sometimes the lines can get long.")    
     #tokened_sentence = tokenize(cleaned_sentence)
     #print(cleaned_sentence)
     #print(tokened_sentence)
-    vocab_dict, vocab_size = get_dataset_vocab("../data/Amazon")
-    with open("../data/Amazon/amazon.vacab.dict.json", 'w') as fout:
-        json.dump(vocab_dict, fout)
-    glove = load_glove('../data/glove.6B/glove.6B.50d.txt')    
-    W = construct_w2v_matrix(glove, 50, vocab_dict, vocab_size)    
-    W_list = W.tolist()
-    json.dump(W_list, codecs.open("../data/Amazon/amazon.w2v.matrix.json",'w', encoding='utf-8'))
+    #vocab_dict, vocab_size = get_dataset_vocab("../data/Amazon")
+    #with open("../data/Amazon/amazon.vacab.dict.json", 'w') as fout:
+    #    json.dump(vocab_dict, fout)
+    #glove = load_glove('../data/glove.6B/glove.6B.50d.txt')    
+    #W = construct_w2v_matrix(glove, 50, vocab_dict, vocab_size)    
+    #W_list = W.tolist()
+    #json.dump(W_list, codecs.open("../data/Amazon/amazon.w2v.matrix.json",'w', encoding='utf-8'))

@@ -21,9 +21,9 @@ def get_part_training(dataset_path, proportion):
     # get the full paths, word2idx and embedding matrix for each dataset
     is_amazon = re.search(r'Amazon', dataset_path)
     if is_amazon is not None:
-        origin_dataset_path = dataset_path + "/amazon.train.cleaned.tokenized.csv"          
+        origin_dataset_path = dataset_path + "/amazon.cleaned.datasets/amazon.train.cleaned.csv"          
     else:
-        origin_dataset_path = dataset_path + "/yelp.train.cleaned.tokenized.csv"                     
+        origin_dataset_path = dataset_path + "/yelp.cleaned.datasets/yelp.train.cleaned.csv"                     
 
     labels = []
     contexts = []
@@ -35,6 +35,9 @@ def get_part_training(dataset_path, proportion):
             labels.append(row[0]) 
             contexts.append(row[1])
 
+    # remove the header
+    labels = labels[1:]
+    contexts = contexts[1:]
     # split the whole training dataset into the part of it.
     train_x, _, train_y, _ = model_selection.train_test_split(contexts, labels, train_size=proportion)
 
@@ -45,9 +48,9 @@ def get_part_training(dataset_path, proportion):
 
     # get the output filename
     if re.search(r'amazon', origin_dataset_path) is not None:
-        output_file = dataset_path + "/amazon.train." + str(int(proportion*100)) + "%.csv"
+        output_file = dataset_path + "/amazon.cleaned.datasets/amazon.train.cleaned" + str(int(proportion*100)) + "%.csv"
     else:
-        output_file = dataset_path + "/yelp.train." + str(int(proportion*100)) + "%.csv"
+        output_file = dataset_path + "/yelp.cleaned.datasets/yelp.train.cleaned" + str(int(proportion*100)) + "%.csv"
     # write into the file.
     train_df.to_csv(output_file, encoding='utf-8', index=False)                  
     
