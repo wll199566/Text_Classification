@@ -17,9 +17,8 @@ def clean_tokenize_datasets(dataset_path):
      Argument:
              dataset_path: the folder name storing amazon or yelp dataset,
                            like '../data/Amazon' or '../data/Yelp'
-             embedding_size: the dimension of word vector
      Output:
-             .csv files containing (label, average word vector)                      
+             .csv files containing cleaned and tokenized datasets                      
     """    
     # get the full paths, word2idx and embedding matrix for each dataset
     is_amazon = re.search(r'Amazon', dataset_path)
