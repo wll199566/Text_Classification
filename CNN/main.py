@@ -78,8 +78,10 @@ def binary_accuracy(preds, y):
 
 
 def main(args):
+    print("Begin to load data!")
     EMBEDDING_DIM = args.glove_size
     vocab, train_loader, val_loader = data_loader(args.root, args.glove_size, args.max_size)
+    print("Loading Finished")
     INPUT_DIM = len(vocab)
     pretrained_embeddings = vocab.vectors
 
@@ -117,8 +119,10 @@ if __name__ == "__main__":
                         default='50',
                         help='glove vector size')
     parser.add_argument('--root', type=str,
-                        default='./data/yelp.cleaned.datasets',
+                        default='../data/yelp.cleaned.datasets',
                         help='directory of dataset')
     parser.add_argument('--max_size', type=int,
                         default='3000',
                         help='maximum size of sentences')
+    args = parser.parse_args()
+    main(args)
