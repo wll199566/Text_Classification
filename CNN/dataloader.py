@@ -1,11 +1,11 @@
 import torch
 from torchtext import data
-from torchtext import datasets
+import torch.utils.data as data
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
-class Vocab(datasets):
+class Vocab(data.Dataset):
     def __init__(self, root="./data/yelp.cleaned.datasets", glove_size=50, max_size=3000):
         self.TEXT = data.Field(tokenize='spacy')
         self.LABEL = data.Field(sequential=False, use_vocab=False, dtype=torch.float)
