@@ -2,8 +2,8 @@ import argparse
 import torch
 from torchtext import data
 
-from .model import CNN
-from .dataloader import data_loader
+from model import CNN
+from dataloader import data_loader
 
 N_FILTERS = 100
 FILTER_SIZES = [3, 4, 5]
@@ -101,6 +101,7 @@ def main(args):
     model = model.to(device)
     criterion = criterion.to(device)
 
+    print("Start training!")
     for epoch in range(N_EPOCHS):
         train_loss, train_acc = train(model, train_iterator, optimizer, criterion)
         valid_loss, valid_acc = evaluate(model, valid_iterator, criterion)
