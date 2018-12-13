@@ -18,7 +18,7 @@ class Vocab(torch.utils.data.Dataset):
         print("val[0].__dict__: ", self.val[0].__dict__['label'])
         print("val[0].['text']: ", self.val[0].__dict__['text'][:10])
 
-        glove = "glove.6B." + glove_size + "d"
+        glove = "glove.6B." + str(glove_size) + "d"
         self.TEXT.build_vocab(self.trn, max_size=max_size, vectors=glove)
 
     def __getitem__(self, index):
