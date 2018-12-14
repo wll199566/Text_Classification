@@ -1,12 +1,14 @@
 import torch
 from torchtext import data
+import spacy
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 class Vocab(torch.utils.data.Dataset):
     def __init__(self, root="./data/yelp.cleaned.datasets", glove_size=50, max_size=3000):
-        self.TEXT = data.Field(tokenize='spacy')
+        self.spacy_en = spacy.load('en')
+        self.TEXT = data.Field(tokenize=self.tokenizer)
         self.LABEL = data.Field(sequential=False, use_vocab=False, dtype=torch.float)
         tv_dataFields = [("label", self.LABEL), ("text", self.TEXT)]
         self.trn, self.val = data.TabularDataset.splits(path=root, train='train.csv',
@@ -27,6 +29,12 @@ class Vocab(torch.utils.data.Dataset):
     def __len__(self):
         return len(self.trn) + len(self.val)
 
+    def tokenizer(self, text):
+        token = [t.text for t in self.spacy_en.tokenizer(text)]
+        if len(token) < 5:
+            for i in range(0, 5 - len(token)):
+                token.append('<PAD>')
+        return token
 
 def data_loader(root="./data/yelp.cleaned.datasets", glove_size=50, max_size=3000):
     vocab = Vocab(root, glove_size, max_size)
