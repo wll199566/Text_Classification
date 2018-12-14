@@ -89,7 +89,7 @@ def main(args):
     model.embedding.weight.data.copy_(pretrained_embeddings)
 
     train_iterator, valid_iterator = data.BucketIterator.splits(
-        (vocab.trn, vocab.val),
+        (train_loader, val_loader),
         batch_size=BATCH_SIZE,
         device=device,
         sort_key=lambda x: len(x.text),
