@@ -80,13 +80,33 @@ def binary_accuracy(preds, y):
 def main(args):
     print("Begin to load data!")
     EMBEDDING_DIM = args.glove_size
-    vocab, train_loader, val_loader = data_loader(args.root, args.glove_size, args.max_size)
+
+    if args.is_yelp:
+        root = '../data/yelp.cleaned.datasets'
+        save_name = 'Yelp'
+    else:
+        root = '../data/amazon.cleaned.datasets'
+        save_name = 'Amazon'
+
+    check_point = True if args.model_path else False
+
+    vocab, train_loader, val_loader = data_loader(root, args.glove_size, args.max_size)
+
     print("Loading Finished")
+
     INPUT_DIM = len(vocab)
+    print("INPUT_DIM: ", INPUT_DIM)
+
     pretrained_embeddings = vocab.vectors
 
     model = CNN(INPUT_DIM, EMBEDDING_DIM, N_FILTERS, FILTER_SIZES, OUTPUT_DIM, DROPOUT)
-    model.embedding.weight.data.copy_(pretrained_embeddings)
+
+
+    # load model
+    if check_point:
+        model.load_state_dict(torch.load(args.model_path, map_location=device))
+    else:
+        model.embedding.weight.data.copy_(pretrained_embeddings)
 
     train_iterator, valid_iterator = data.BucketIterator.splits(
         (train_loader, val_loader),
@@ -97,7 +117,7 @@ def main(args):
         sort_within_batch=True)
 
     N_EPOCHS = 10
-    optimizer = torch.optim.Adam(model.parameters())
+    optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
     criterion = torch.nn.BCEWithLogitsLoss()
 
     model = model.to(device)
@@ -109,7 +129,7 @@ def main(args):
         valid_loss, valid_acc = evaluate(model, valid_iterator, criterion)
         print(
             f'| Epoch: {epoch + 1:02} | Train Loss: {train_loss:.3f} | Train Acc: {train_acc * 100:.2f}% | Val. Loss: {valid_loss:.3f} | Val. Acc: {valid_acc * 100:.2f}% |')
-        filepath = 'Yelp-{}.ckpt'.format(epoch + 1)
+        filepath = save_name + '-{}.ckpt'.format(epoch + 1)
         torch.save(model.state_dict(), filepath)
 
 
@@ -118,11 +138,18 @@ if __name__ == "__main__":
     parser.add_argument('--glove_size', type=int,
                         default='50',
                         help='glove vector size')
-    parser.add_argument('--root', type=str,
-                        default='../data/yelp.cleaned.datasets',
+    parser.add_argument('--is_yelp', type=bool,
+                        default=True,
+                        # default='../data/yelp.cleaned.datasets',
                         help='directory of dataset')
+    parser.add_argument('--model_path', type=str,
+                        default="",
+                        help='Load a pre-trained model')
     parser.add_argument('--max_size', type=int,
                         default='3000',
                         help='maximum size of sentences')
+    parser.add_argument('--learning_rate', type=float,
+                        default=0.001,
+                        help='')
     args = parser.parse_args()
     main(args)
