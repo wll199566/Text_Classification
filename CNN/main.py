@@ -130,7 +130,7 @@ def main(args):
         print(
             f'| Epoch: {epoch + 1:02} | Train Loss: {train_loss:.3f} | Train Acc: {train_acc * 100:.2f}% | Val. Loss: {valid_loss:.3f} | Val. Acc: {valid_acc * 100:.2f}% |')
         filepath = save_name + '-{}.ckpt'.format(epoch + 1)
-        torch.save(model.state_dict(), filepath)
+        torch.save(model.state_dict(), os.path.join(args.saving_model_path, filepath))
 
 
 if __name__ == "__main__":
@@ -151,5 +151,7 @@ if __name__ == "__main__":
     parser.add_argument('--learning_rate', type=float,
                         default=0.001,
                         help='')
+    parser.add_argument('--saving_model_path', type=str, default='/scratch/xc1113/Text_Classification/CNN/models',
+                        help='path to save models')
     args = parser.parse_args()
     main(args)
