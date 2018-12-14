@@ -1,9 +1,9 @@
 #!/bin/bash
 
-#SBATCH --job-name=generate_chairs
+#SBATCH --job-name=Yelp_CNN
 #SBATCH --nodes=1
-#SBATCH --cpus-per-task=2
-#SBATCH --gres=gpu
+#SBATCH -c4
+#SBATCH --gres=gpu:v100:1
 #SBATCH --mem=64GB
 #SBATCH --time=3:00:00
 #SBATCH --mail-type=END
