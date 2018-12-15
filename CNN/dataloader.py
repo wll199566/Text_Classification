@@ -36,6 +36,7 @@ class Vocab(torch.utils.data.Dataset):
                 token.append('<PAD>')
         return token
 
+
 def data_loader(root="./data/yelp.cleaned.datasets", glove_size=50, max_size=3000):
     vocab = Vocab(root, glove_size, max_size)
     # train_iterator, valid_iterator = data.BucketIterator.splits(
