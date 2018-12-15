@@ -66,7 +66,7 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_path', type=str,
-                        default="./Amazon-10.ckpt",
+                        default="./Amazon10.ckpt",
                         help='Load model')
     parser.add_argument('--input_yelp_file', type=str,
                         default="../data/yelp.cleaned.datasets/train5.csv",
