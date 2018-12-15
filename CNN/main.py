@@ -23,7 +23,7 @@ def train(model, iterator, optimizer, criterion):
 
     for batch in iterator:
         optimizer.zero_grad()
-        batch = batch.to(device)
+        # batch = batch.to(device)
         #         _, res = model(batch.text)
         res = model(batch.text)
         predictions = res.squeeze(1)
@@ -54,7 +54,7 @@ def evaluate(model, iterator, criterion):
     with torch.no_grad():
         for batch in iterator:
             #             _, res = model(batch.text)
-            batch = batch.to(device)
+            # batch = batch.to(device)
 
             res = model(batch.text)
             predictions = res.squeeze(1)
