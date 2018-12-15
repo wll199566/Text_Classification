@@ -61,7 +61,7 @@ def tokenizer(text):
 
 
 def main(args):
-    if args.is_yelp:
+    if args.is_yelp == "yelp":
         root = '../data/yelp.cleaned.datasets'
     else:
         root = '../data/amazon.cleaned.datasets'
@@ -99,10 +99,10 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_path', type=str,
-                        default="./Yelp-10.ckpt",
+                        default="./Yelp-8.ckpt",
                         help='Test model')
-    parser.add_argument('--is_yelp', type=bool,
-                        default=True,
+    parser.add_argument('--is_yelp', type=str,
+                        default="yelp",
                         # default='../data/yelp.cleaned.datasets',
                         help='directory of dataset')
 
