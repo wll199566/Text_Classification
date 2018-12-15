@@ -36,8 +36,8 @@ class Vocab(torch.utils.data.Dataset):
         return token
 
 
-def data_loader(root="./data/yelp.cleaned.datasets", glove_size=50, max_size=3000):
-    vocab = Vocab(root, glove_size, max_size)
+def data_loader(root="./data/yelp.cleaned.datasets", max_size=3000):
+    vocab = Vocab(root, max_size)
     # train_iterator, valid_iterator = data.BucketIterator.splits(
     #     (vocab.trn, vocab.val),
     #     batch_size=batch_size,
