@@ -1,6 +1,7 @@
 import argparse
 import torch
 from torchtext import data
+import os
 
 from model import CNN
 from dataloader import data_loader
@@ -11,6 +12,7 @@ OUTPUT_DIM = 1
 DROPOUT = 0.5
 BATCH_SIZE = 64
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+glove_size = 50
 
 
 def train(model, iterator, optimizer, criterion):
@@ -81,9 +83,9 @@ def binary_accuracy(preds, y):
 
 def main(args):
     print("Begin to load data!")
-    EMBEDDING_DIM = args.glove_size
+    EMBEDDING_DIM = glove_size
 
-    if args.is_yelp:
+    if args.is_yelp == "yelp":
         root = '../data/yelp.cleaned.datasets'
         save_name = 'Yelp'
     else:
@@ -92,7 +94,7 @@ def main(args):
 
     check_point = True if args.model_path else False
 
-    vocab, train_loader, val_loader = data_loader(root, args.glove_size, args.max_size)
+    vocab, train_loader, val_loader = data_loader(root, args.max_size)
 
     print("Loading Finished")
 
@@ -137,12 +139,8 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--glove_size', type=int,
-                        default='50',
-                        help='glove vector size')
-    parser.add_argument('--is_yelp', type=bool,
-                        default=True,
-                        # default='../data/yelp.cleaned.datasets',
+    parser.add_argument('--is_yelp', type=str,
+                        default="yelp",
                         help='directory of dataset')
     parser.add_argument('--model_path', type=str,
                         default="",
