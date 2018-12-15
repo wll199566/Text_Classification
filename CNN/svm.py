@@ -101,20 +101,20 @@ if __name__ == "__main__":
 
     print("start to train")
     # linear svc
-    # valid_acc_linear_svc = []
+    valid_acc_linear_svc = []
     c_values = [0.01, 0.1, 1, 10, 100]
-    # for c in c_values:
-    #    model_file = "/linear_svc_" + str(c) + ".sav"    
-    #    model = svm.LinearSVC(penalty='l1', dual=False, C=c, max_iter=1000)
-    #    valid_accuracy = train_model(model, train_X, train_Y, valid_X, valid_Y, model_folder+model_file)
-    #    valid_acc_linear_svc.append(valid_accuracy)
-    # print("valid_acc_linear_svc: ", valid_acc_linear_svc)
+    for c in c_values:
+       model_file = "/linear_svc_" + str(c) + ".sav"
+       model = svm.LinearSVC(penalty='l1', dual=False, C=c, max_iter=1000)
+       valid_accuracy = train_model(model, train_X, train_Y, valid_X, valid_Y, model_folder+model_file)
+       valid_acc_linear_svc.append(valid_accuracy)
+    print("valid_acc_linear_svc: ", valid_acc_linear_svc)
 
     # rbf kernel
-    valid_acc_rbf_svc = []
-    for c in c_values:
-        model_file = "/rbf_svc_" + str(c) + ".sav"
-        model = svm.SVC(C=c, kernel='rbf', max_iter=1000)
-        valid_accuracy = train_model(model, train_X, train_Y, valid_X, valid_Y, model_folder + model_file)
-        valid_acc_rbf_svc.append(valid_accuracy)
-    print("valid_acc_rbf_svc: ", valid_acc_rbf_svc)
+    # valid_acc_rbf_svc = []
+    # for c in c_values:
+    #     model_file = "/rbf_svc_" + str(c) + ".sav"
+    #     model = svm.SVC(C=c, kernel='rbf', max_iter=1000)
+    #     valid_accuracy = train_model(model, train_X, train_Y, valid_X, valid_Y, model_folder + model_file)
+    #     valid_acc_rbf_svc.append(valid_accuracy)
+    # print("valid_acc_rbf_svc: ", valid_acc_rbf_svc)
