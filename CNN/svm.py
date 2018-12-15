@@ -91,6 +91,7 @@ if __name__ == "__main__":
     valid_file = "./yelp_val_vec.json"
     test_file = "./yelp5vec.json"
 
+    print("start to read file")
     train_X, train_Y = read_dataset_file(train_file)
     valid_X, valid_Y = read_dataset_file(valid_file)
     test_X, test_Y = read_dataset_file(test_file)
@@ -98,6 +99,7 @@ if __name__ == "__main__":
     # manually grid search
     model_folder = "./models"
 
+    print("start to train")
     # linear svc
     # valid_acc_linear_svc = []
     c_values = [0.01, 0.1, 1, 10, 100]
