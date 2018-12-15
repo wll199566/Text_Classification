@@ -6,7 +6,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 class Vocab(torch.utils.data.Dataset):
-    def __init__(self, root="./data/yelp.cleaned.datasets", glove_size=50, max_size=3000):
+    def __init__(self, root="./data/yelp.cleaned.datasets", max_size=3000):
         self.spacy_en = spacy.load('en')
         self.TEXT = data.Field(tokenize=self.tokenizer)
         self.LABEL = data.Field(sequential=False, use_vocab=False, dtype=torch.float)
@@ -20,8 +20,7 @@ class Vocab(torch.utils.data.Dataset):
         print("val[0].__dict__: ", self.val[0].__dict__['label'])
         print("val[0].['text']: ", self.val[0].__dict__['text'][:10])
 
-        glove = "glove.6B." + str(glove_size) + "d"
-        self.TEXT.build_vocab(self.trn, max_size=max_size, vectors=glove)
+        self.TEXT.build_vocab(self.trn, max_size=max_size, vectors="glove.6B.50d")
 
     def __getitem__(self, index):
         return self.trn[index], self.val[index]
