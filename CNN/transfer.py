@@ -21,12 +21,13 @@ amazon_root = '../data/amazon.cleaned.datasets'
 
 
 def main(args):
+    print("Start!")
     model = CNN(INPUT_DIM, EMBEDDING_DIM, N_FILTERS, FILTER_SIZES, OUTPUT_DIM, DROPOUT, is_train=False)
     model.load_state_dict(torch.load(args.model_path, map_location=device))
     model = model.to(device)
-
+    print("Load model success!")
     vocab, _, _ = data_loader(amazon_root, load_val=False, load_train=False)
-
+    print("Load vocab success!")
     label_list = []
     context_list = []
 
@@ -42,7 +43,7 @@ def main(args):
         with torch.no_grad():
             res = model(tensor)
         return res
-
+    print("Start transfer to vector!")
     with open(args.input_yelp_file, 'rt', encoding='utf-8') as fin:
         csv_header = csv.reader(fin, delimiter=',')
         for i, row in enumerate(csv_header):
@@ -52,6 +53,7 @@ def main(args):
     label_list = label_list[1:]
     context_list = context_list[1:]
 
+    "Start to write to json!"
     with open(args.output_json_file, 'wt') as fout:
         for i, context in enumerate(context_list):
             average_vec_dict = {}
