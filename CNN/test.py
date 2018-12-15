@@ -65,17 +65,22 @@ def main(args):
         root = '../data/yelp.cleaned.datasets'
     else:
         root = '../data/amazon.cleaned.datasets'
+    print("Start!")
 
     model = CNN(INPUT_DIM, EMBEDDING_DIM, N_FILTERS, FILTER_SIZES, OUTPUT_DIM, DROPOUT)
     model.load_state_dict(torch.load(args.model_path, map_location=device))
     criterion = torch.nn.BCEWithLogitsLoss()
 
     model = model.to(device)
+
+    print("Load model Successful")
     criterion = criterion.to(device)
 
     TEXT = data.Field(tokenize=tokenizer)
     LABEL = data.Field(sequential=False, use_vocab=False, dtype=torch.float)
     tst_datafields = [("label", LABEL), ("text", TEXT)]
+
+    print("Start to load test file")
     tst = TabularDataset(
         path=root + "/test.csv",  # 文件路径
         format='csv',
