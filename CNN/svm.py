@@ -52,7 +52,7 @@ def train_model(model, feature_vector_train, labels_train, feature_vector_valid,
     model.fit(feature_vector_train, labels_train)
 
     # store the trained model
-    pickle.dump(model, open(output_model_file, 'wb'))
+    # pickle.dump(model, open(output_model_file, 'wb'))
 
     # predict the labels on validation dataset
     predictions = model.predict(feature_vector_valid)
@@ -114,8 +114,7 @@ if __name__ == "__main__":
     valid_acc_rbf_svc = []
     for c in c_values:
         model_file = "/rbf_svc_" + str(c) + ".sav"
-        model = svm.SVC(C=c, kernel='rbf', max_iter=1000, decision_function_shape="ovo"
-                                                                                  "")
+        model = svm.SVC(C=c, kernel='rbf', max_iter=1000, decision_function_shape="ovo")
         valid_accuracy = train_model(model, train_X, train_Y, valid_X, valid_Y, model_folder + model_file)
         valid_acc_rbf_svc.append(valid_accuracy)
     print("valid_acc_rbf_svc: ", valid_acc_rbf_svc)
