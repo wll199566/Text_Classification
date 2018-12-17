@@ -7,7 +7,6 @@ import spacy
 import csv
 import json
 
-
 N_FILTERS = 100
 FILTER_SIZES = [3, 4, 5]
 OUTPUT_DIM = 1
@@ -28,10 +27,15 @@ def main(args):
     print("Load model success!")
     vocab, _, _ = data_loader(amazon_root, load_val=False, load_train=False)
     print("Load vocab success!")
-    label_list = []
-    context_list = []
 
     model.eval()
+
+    yelp_size = ['5', '05', '005', '0005']
+    input_yelp_files = []
+    output_json_files = []
+    for s in yelp_size:
+        input_yelp_files.append(args.input_yelp_dir + s + '.csv')
+        output_json_files.append('./yelp' + s + 'vec.json')
 
     def get_vec(sentence, min_len=5):
         tokenized = [tok.text for tok in spacy_en.tokenizer(sentence)]
@@ -43,24 +47,30 @@ def main(args):
         with torch.no_grad():
             res = model(tensor)
         return res
-    print("Start transfer to vector!")
-    with open(args.input_yelp_file, 'rt', encoding='utf-8') as fin:
-        csv_header = csv.reader(fin, delimiter=',')
-        for i, row in enumerate(csv_header):
-            label_list.append(row[0])
-            context_list.append(get_vec(row[1]).cpu())
 
-    label_list = label_list[1:]
-    context_list = context_list[1:]
+    for idx in range(4):
+        label_list = []
+        context_list = []
 
-    "Start to write to json!"
-    with open(args.output_json_file, 'wt') as fout:
-        for i, context in enumerate(context_list):
-            average_vec_dict = {}
-            average_vec_dict['label'] = str(label_list[i])
-            average_vec_dict['avg_vec'] = context_list[i].squeeze(0).numpy().tolist()
-            json.dump(average_vec_dict, fout)
-            fout.write('\n')
+        print("Yelp-0." + yelp_size[idx] + '%')
+        print("Start transfer to vector!")
+        with open(input_yelp_files[idx], 'rt', encoding='utf-8') as fin:
+            csv_header = csv.reader(fin, delimiter=',')
+            for i, row in enumerate(csv_header):
+                label_list.append(row[0])
+                context_list.append(get_vec(row[1]).cpu())
+
+        label_list = label_list[1:]
+        context_list = context_list[1:]
+
+        print("Start to write to json!")
+        with open(output_json_files[idx], 'wt') as fout:
+            for i, context in enumerate(context_list):
+                average_vec_dict = {}
+                average_vec_dict['label'] = str(label_list[i])
+                average_vec_dict['avg_vec'] = context_list[i].squeeze(0).numpy().tolist()
+                json.dump(average_vec_dict, fout)
+                fout.write('\n')
 
 
 if __name__ == "__main__":
@@ -68,11 +78,11 @@ if __name__ == "__main__":
     parser.add_argument('--model_path', type=str,
                         default="./Amazon10.ckpt",
                         help='Load model')
-    parser.add_argument('--input_yelp_file', type=str,
-                        default="../data/yelp.full.cleaned/yelp.full.cleaned60%.csv",
+    parser.add_argument('--input_yelp_dir', type=str,
+                        default="../data/yelp.cleaned.datasets/train",
                         help='')
-    parser.add_argument('--output_json_file', type=str,
-                        default="./multi/yelp60vec.json",
-                        help='')
+    # parser.add_argument('--output_json_file', type=str,
+    #                     default="./yelp5vec.json",
+    #                     help='')
     args = parser.parse_args()
     main(args)
