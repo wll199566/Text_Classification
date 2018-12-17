@@ -32,12 +32,12 @@ def main(args):
 
     model.eval()
 
-    yelp_size = ['5', '05', '005', '0005']
+    yelp_size = ['20', '5', '0.5', '0.05', '0.005', '0.0005']
     input_yelp_files = []
     output_json_files = []
     for s in yelp_size:
-        input_yelp_files.append(args.input_yelp_dir + s + '.csv')
-        output_json_files.append('./yelp' + s + 'vec.json')
+        input_yelp_files.append(args.input_yelp_dir + s + '%.csv')
+        output_json_files.append('./multi/yelp' + s + 'vec.json')
 
     def get_vec(sentence, min_len=5):
         tokenized = [tok.text for tok in spacy_en.tokenizer(sentence)]
@@ -50,8 +50,8 @@ def main(args):
             res = model(tensor)
         return res
 
-    for idx in range(4):
-        print("Yelp-0." + yelp_size[idx] + '%')
+    for idx in range(6):
+        print("Yelp-" + yelp_size[idx] + '%')
         print("Start transfer to vector!")
         with open(input_yelp_files[idx], 'rt', encoding='utf-8') as fin:
             csv_header = csv.reader(fin, delimiter=',')
@@ -78,7 +78,7 @@ if __name__ == "__main__":
                         default="./Amazon10.ckpt",
                         help='Load model')
     parser.add_argument('--input_yelp_dir', type=str,
-                        default="../data/yelp.cleaned.datasets/train",
+                        default="../data/yelp.full.cleaned/yelp.full.cleaned",
                         help='')
     # parser.add_argument('--output_json_file', type=str,
     #                     default="./yelp5vec.json",
