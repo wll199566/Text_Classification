@@ -87,8 +87,8 @@ if __name__ == "__main__":
     # valid_file = "../data/Amazon/amazon.cleaned.datasets/amazon.cleaned.vector/amazon.valid.vector.json"
     # test_file = "../data/Amazon/amazon.cleaned.datasets/amazon.cleaned.vector/amazon.test.vector.json"
 
-    train_file = "./yelp5vec.json"
-    valid_file = "./yelp_val_vec.json"
+    train_file = "./Multiyelp0.005vec.json"
+    valid_file = "./MultiyelpValidvec.json"
     # test_file = "./yelp5vec.json"
 
     print("start to read file")
@@ -105,16 +105,17 @@ if __name__ == "__main__":
     c_values = [0.01, 0.1, 1, 10, 100]
     for c in c_values:
        model_file = "/linear_svc_" + str(c) + ".sav"
-       model = svm.LinearSVC(penalty='l1', dual=False, C=c, max_iter=1000)
+       model = svm.LinearSVC(penalty='l1', dual=False, C=c, max_iter=1000, multi_class="ovr")
        valid_accuracy = train_model(model, train_X, train_Y, valid_X, valid_Y, model_folder+model_file)
        valid_acc_linear_svc.append(valid_accuracy)
     print("valid_acc_linear_svc: ", valid_acc_linear_svc)
 
     # rbf kernel
-    # valid_acc_rbf_svc = []
-    # for c in c_values:
-    #     model_file = "/rbf_svc_" + str(c) + ".sav"
-    #     model = svm.SVC(C=c, kernel='rbf', max_iter=1000)
-    #     valid_accuracy = train_model(model, train_X, train_Y, valid_X, valid_Y, model_folder + model_file)
-    #     valid_acc_rbf_svc.append(valid_accuracy)
-    # print("valid_acc_rbf_svc: ", valid_acc_rbf_svc)
+    valid_acc_rbf_svc = []
+    for c in c_values:
+        model_file = "/rbf_svc_" + str(c) + ".sav"
+        model = svm.SVC(C=c, kernel='rbf', max_iter=1000, decision_function_shape="ovo"
+                                                                                  "")
+        valid_accuracy = train_model(model, train_X, train_Y, valid_X, valid_Y, model_folder + model_file)
+        valid_acc_rbf_svc.append(valid_accuracy)
+    print("valid_acc_rbf_svc: ", valid_acc_rbf_svc)
