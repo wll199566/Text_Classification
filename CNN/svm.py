@@ -63,22 +63,22 @@ def train_model(model, feature_vector_train, labels_train, feature_vector_valid,
     return accuracy
 
 
-def test_model(model_file, feature_vector_test, labels_test):
-    """
-     Arguments:
-              model_file: .sav file storing the trained model
-              feature_vector_test: numpy array of test samples
-              labels_test: numpy array of test labels 
-     Output:
-              accuracy: test accuracy         
-    """
-    # load the trained model
-    model = pickle.load(open(model_file, 'rb'))
-
-    # get the accuracy of the model on the test dataset
-    accuracy = model.score(feature_vector_test, labels_test)
-
-    return accuracy
+# def test_model(model_file, feature_vector_test, labels_test):
+#     """
+#      Arguments:
+#               model_file: .sav file storing the trained model
+#               feature_vector_test: numpy array of test samples
+#               labels_test: numpy array of test labels
+#      Output:
+#               accuracy: test accuracy
+#     """
+#     # load the trained model
+#     model = pickle.load(open(model_file, 'rb'))
+#
+#     # get the accuracy of the model on the test dataset
+#     accuracy = model.score(feature_vector_test, labels_test)
+#
+#     return accuracy
 
 
 if __name__ == "__main__":
@@ -87,14 +87,14 @@ if __name__ == "__main__":
     # valid_file = "../data/Amazon/amazon.cleaned.datasets/amazon.cleaned.vector/amazon.valid.vector.json"
     # test_file = "../data/Amazon/amazon.cleaned.datasets/amazon.cleaned.vector/amazon.test.vector.json"
 
-    train_file = "./yelp20vec.json"
+    train_file = "./yelp5vec.json"
     valid_file = "./yelp_val_vec.json"
-    test_file = "./yelp5vec.json"
+    # test_file = "./yelp5vec.json"
 
     print("start to read file")
     train_X, train_Y = read_dataset_file(train_file)
     valid_X, valid_Y = read_dataset_file(valid_file)
-    test_X, test_Y = read_dataset_file(test_file)
+    # test_X, test_Y = read_dataset_file(test_file)
 
     # manually grid search
     model_folder = "./models"
