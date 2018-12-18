@@ -8,7 +8,7 @@ from dataloader import data_loader
 
 N_FILTERS = 100
 FILTER_SIZES = [3, 4, 5]
-OUTPUT_DIM = 1
+OUTPUT_DIM = 5
 DROPOUT = 0.5
 BATCH_SIZE = 64
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -29,17 +29,16 @@ def train(model, iterator, optimizer, criterion):
         optimizer.zero_grad()
 
         logit = model(batch.text)
-        print(logit.size())
+        # print(logit.size())
         logit = logit.squeeze(1)
-        print(logit.size())
+        # print(logit.size())
         loss = criterion(logit, target)
 
         loss.backward()
-
         optimizer.step()
 
         correct = (torch.max(logit, 1)[1].view(target.size()).data == target.data).sum()
-        acc = 1.0 * correct / batch.batch_size
+        acc = 100.0 * correct / batch.batch_size
         epoch_loss += loss.item()
         epoch_acc += acc
 
@@ -65,7 +64,7 @@ def evaluate(model, iterator, criterion):
             loss = criterion(logit, target)
 
             corrects = (torch.max(logit, 1)[1].view(target.size()).data == target.data).sum()
-            epoch_acc += 1.0 * corrects / batch.batch_size
+            epoch_acc += 100.0 * corrects / batch.batch_size
             epoch_loss += loss.item()
 
     return epoch_loss / len(iterator), epoch_acc / len(iterator)
@@ -122,7 +121,7 @@ def main(args):
         # BucketIterator 依据什么对数据分组
         sort_within_batch=True)
 
-    N_EPOCHS = 10
+    N_EPOCHS = 15
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
     # criterion = torch.nn.BCEWithLogitsLoss()
     criterion = torch.nn.CrossEntropyLoss()
@@ -134,7 +133,7 @@ def main(args):
         train_loss, train_acc = train(model, train_iterator, optimizer, criterion)
         valid_loss, valid_acc = evaluate(model, valid_iterator, criterion)
         print(
-            f'| Epoch: {epoch + 1:02} | Train Loss: {train_loss:.3f} | Train Acc: {train_acc * 100:.2f}% | Val. Loss: {valid_loss:.3f} | Val. Acc: {valid_acc * 100:.2f}% |')
+            f'| Epoch: {epoch + 1:02} | Train Loss: {train_loss:.3f} | Train Acc: {train_acc :.2f}% | Val. Loss: {valid_loss:.3f} | Val. Acc: {valid_acc :.2f}% |')
         # filepath = save_name + '-{}.ckpt'.format(epoch + 1)
         # torch.save(model.state_dict(), os.path.join(args.saving_model_path, filepath))
 
