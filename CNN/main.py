@@ -22,25 +22,25 @@ def train(model, iterator, optimizer, criterion):
     model.train()
 
     for batch in iterator:
-        optimizer.zero_grad()
-        # batch = batch.to(device)
-        #         _, res = model(batch.text)
-        res = model(batch.text)
-        predictions = res.squeeze(1)
-        #         print(predictions, type(predictions))
-        #         print(batch.label, type(batch.label))
-        #         break
+        target = batch.label
+        target.data.sub_(1)
+        target = target.to(device)
 
-        loss = criterion(predictions, batch.label)
-        # loss = criterion(predictions, batch.label)
-        acc = binary_accuracy(predictions, batch.label)
+        optimizer.zero_grad()
+
+        logit = model(batch.text)
+        logit = logit.squeeze(1)
+
+        loss = criterion(logit, target)
 
         loss.backward()
 
         optimizer.step()
 
+        correct = (torch.max(logit, 1)[1].view(target.size()).data == target.data).sum()
+        acc = 1.0 * correct / batch.batch_size
         epoch_loss += loss.item()
-        epoch_acc += acc.item()
+        epoch_acc += acc
 
     return epoch_loss / len(iterator), epoch_acc / len(iterator)
 
@@ -53,32 +53,33 @@ def evaluate(model, iterator, criterion):
 
     with torch.no_grad():
         for batch in iterator:
-            #             _, res = model(batch.text)
-            # batch = batch.to(device)
+            if batch.text.size(0) < 5:
+                continue
+            target = batch.label
+            target.data.sub_(1)
+            target = target.to(device)
 
-            res = model(batch.text)
-            predictions = res.squeeze(1)
+            logit = model(batch.text)
+            logit = logit.squeeze(1)
+            loss = criterion(logit, target)
 
-            loss = criterion(predictions, batch.label)
-
-            acc = binary_accuracy(predictions, batch.label)
-
+            corrects = (torch.max(logit, 1)[1].view(target.size()).data == target.data).sum()
+            epoch_acc += 1.0 * corrects / batch.batch_size
             epoch_loss += loss.item()
-            epoch_acc += acc.item()
 
     return epoch_loss / len(iterator), epoch_acc / len(iterator)
 
 
-def binary_accuracy(preds, y):
-    """
-    Returns accuracy per batch, i.e. if you get 8/10 right, this returns 0.8, NOT 8
-    """
-
-    # round predictions to the closest integer
-    rounded_preds = torch.round(torch.sigmoid(preds))
-    correct = rounded_preds == y  # convert into float for division
-    acc = correct.sum().float() / len(correct)
-    return acc
+# def binary_accuracy(preds, y):
+#     """
+#     Returns accuracy per batch, i.e. if you get 8/10 right, this returns 0.8, NOT 8
+#     """
+#
+#     # round predictions to the closest integer
+#     rounded_preds = torch.round(torch.sigmoid(preds))
+#     correct = rounded_preds == y  # convert into float for division
+#     acc = correct.sum().float() / len(correct)
+#     return acc
 
 
 def main(args):
@@ -86,7 +87,7 @@ def main(args):
     EMBEDDING_DIM = glove_size
 
     if args.is_yelp == "yelp":
-        root = '../data/yelp.cleaned.datasets'
+        root = '../data/yelp.full.cleaned'
         save_name = 'Yelp'
     else:
         root = '../data/amazon.cleaned.datasets'
@@ -122,8 +123,8 @@ def main(args):
 
     N_EPOCHS = 10
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
-    criterion = torch.nn.BCEWithLogitsLoss()
-
+    # criterion = torch.nn.BCEWithLogitsLoss()
+    criterion = torch.nn.CrossEntropyLoss()
     model = model.to(device)
     criterion = criterion.to(device)
 
@@ -133,8 +134,8 @@ def main(args):
         valid_loss, valid_acc = evaluate(model, valid_iterator, criterion)
         print(
             f'| Epoch: {epoch + 1:02} | Train Loss: {train_loss:.3f} | Train Acc: {train_acc * 100:.2f}% | Val. Loss: {valid_loss:.3f} | Val. Acc: {valid_acc * 100:.2f}% |')
-        filepath = save_name + '-{}.ckpt'.format(epoch + 1)
-        torch.save(model.state_dict(), os.path.join(args.saving_model_path, filepath))
+        # filepath = save_name + '-{}.ckpt'.format(epoch + 1)
+        # torch.save(model.state_dict(), os.path.join(args.saving_model_path, filepath))
 
 
 if __name__ == "__main__":

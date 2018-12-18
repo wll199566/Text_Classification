@@ -9,7 +9,7 @@ class Vocab(torch.utils.data.Dataset):
     def __init__(self, root="./data/yelp.cleaned.datasets", max_size=3000, load_val=True):
         self.spacy_en = spacy.load('en')
         self.TEXT = data.Field(tokenize=self.tokenizer)
-        self.LABEL = data.Field(sequential=False, use_vocab=False, dtype=torch.float)
+        self.LABEL = data.Field(sequential=False)
         tv_dataFields = [("label", self.LABEL), ("text", self.TEXT)]
 
         self.load_val = load_val
@@ -29,6 +29,7 @@ class Vocab(torch.utils.data.Dataset):
         # print("val[0].['text']: ", self.val[0].__dict__['text'][:10])
 
         self.TEXT.build_vocab(self.trn, max_size=max_size, vectors="glove.6B.50d")
+        self.LABEL.build_vocab(self.trn, max_size=5)
 
     def __getitem__(self, index):
         return self.trn[index]  # , self.val[index]
