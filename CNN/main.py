@@ -29,8 +29,9 @@ def train(model, iterator, optimizer, criterion):
         optimizer.zero_grad()
 
         logit = model(batch.text)
+        print(logit.size())
         logit = logit.squeeze(1)
-
+        print(logit.size())
         loss = criterion(logit, target)
 
         loss.backward()
