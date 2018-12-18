@@ -1,7 +1,7 @@
 import argparse
 import torch
 from torchtext import data
-import os
+# import os
 
 from model import CNN
 from dataloader import data_loader
@@ -88,10 +88,10 @@ def main(args):
 
     if args.is_yelp == "yelp":
         root = '../data/yelp.full.cleaned'
-        save_name = 'Yelp'
+        # save_name = 'Yelp'
     else:
         root = '../data/amazon.cleaned.datasets'
-        save_name = 'Amazon'
+        # save_name = 'Amazon'
 
     check_point = True if args.model_path else False
 

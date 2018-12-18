@@ -14,8 +14,8 @@ class Vocab(torch.utils.data.Dataset):
 
         self.load_val = load_val
         if self.load_val:
-            self.trn, self.val = data.TabularDataset.splits(path=root, train='train.csv',
-                                                            validation="valid.csv", format='csv',
+            self.trn, self.val = data.TabularDataset.splits(path=root, train='yelp.full.cleaned20%.csv',
+                                                            validation="yelp.full.valid.cleaned.csv", format='csv',
                                                             skip_header=True, fields=tv_dataFields)
         else:
             self.trn, _ = data.TabularDataset.splits(path=root, train='train.csv',
