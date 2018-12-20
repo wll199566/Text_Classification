@@ -19,11 +19,12 @@ def get_part_training(dataset_path, proportion):
              .csv files containing part of the training set.                      
     """    
     # get the full paths, word2idx and embedding matrix for each dataset
-    is_amazon = re.search(r'Amazon', dataset_path)
-    if is_amazon is not None:
-        origin_dataset_path = dataset_path + "/amazon.cleaned.datasets/amazon.train.cleaned.csv"          
-    else:
-        origin_dataset_path = dataset_path + "/yelp.cleaned.datasets/yelp.train.cleaned.csv"                     
+    #is_amazon = re.search(r'Amazon', dataset_path)
+    #if is_amazon is not None:
+    #    origin_dataset_path = dataset_path + "/amazon.cleaned.datasets/amazon.train.cleaned.csv"          
+    #else:
+    #    origin_dataset_path = dataset_path + "/yelp.cleaned.datasets/yelp.train.cleaned.csv"                     
+    origin_dataset_path = dataset_path + "/yelp.full.cleaned/yelp.full.train.cleaned.csv"
 
     labels = []
     contexts = []
@@ -47,17 +48,19 @@ def get_part_training(dataset_path, proportion):
     train_df['context'] = train_x  
 
     # get the output filename
-    if re.search(r'amazon', origin_dataset_path) is not None:
-        output_file = dataset_path + "/amazon.cleaned.datasets/amazon.train.cleaned" + str(int(proportion*100)) + "%.csv"
-    else:
-        output_file = dataset_path + "/yelp.cleaned.datasets/yelp.train.cleaned" + str(int(proportion*100)) + "%.csv"
+    #if re.search(r'amazon', origin_dataset_path) is not None:
+    #    output_file = dataset_path + "/amazon.cleaned.datasets/amazon.train.cleaned" + str(int(proportion*100)) + "%.csv"
+    #else:
+    #    output_file = dataset_path + "/yelp.cleaned.datasets/yelp.train.cleaned" + str(int(proportion*100)) + "%.csv"
+    output_file = dataset_path + "/yelp.full.cleaned/yelp.full.cleaned" + str(proportion*100) + "%.csv"
     # write into the file.
     train_df.to_csv(output_file, encoding='utf-8', index=False)                  
     
 if __name__ == "__main__":
     
-    datasets = ['../data/Amazon', '../data/Yelp']
-    propotions = [0.05, 0.2, 0.6]
+    #datasets = ['../data/Amazon', '../data/Yelp']
+    datasets = ['../data/Yelp-full']
+    propotions = [0.000005, 0.00005, 0.0005, 0.005, 0.05, 0.2, 0.6]
     for dataset in datasets:
         for proportion in propotions:
             get_part_training(dataset, proportion)
